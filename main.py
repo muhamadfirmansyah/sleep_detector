@@ -13,19 +13,14 @@ scaler = joblib.load(SCALER_PATH)
 
 # Function to extract features from audio file
 def extract_features(file_path):
-    y, sr = librosa.load(file_path, sr=16000)
+    y, sr = librosa.load(file_path, sr=16000)  # Load audio
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
     zcr = librosa.feature.zero_crossing_rate(y)
     spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
-    spectral_contrast = librosa.feature.spectral_contrast(y=y, sr=sr)
-    chroma = librosa.feature.chroma_stft(y=y, sr=sr)
-
     return np.hstack([
         np.mean(mfccs, axis=1), np.std(mfccs, axis=1),
         np.mean(zcr), np.std(zcr),
-        np.mean(spectral_centroid), np.std(spectral_centroid),
-        np.mean(spectral_contrast, axis=1), np.std(spectral_contrast, axis=1),
-        np.mean(chroma, axis=1), np.std(chroma, axis=1),
+        np.mean(spectral_centroid), np.std(spectral_centroid)
     ])
 
 # Function to predict snoring or non-snoring
